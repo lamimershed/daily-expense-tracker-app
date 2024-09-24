@@ -42,7 +42,7 @@ export default function DropDownComponent({
       <SelectTrigger
         className={cn(
           "h-[50px] w-full rounded-[12px] border-[#E4E4E4] bg-[#ffffff] px-[20px]",
-          className
+          className,
         )}
       >
         <SelectValue

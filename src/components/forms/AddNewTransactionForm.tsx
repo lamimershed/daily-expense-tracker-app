@@ -73,7 +73,7 @@ const AddNewTransactionForm = ({
             queryKey: ["get-transcation-data"],
           });
         },
-      }
+      },
     );
   };
   return (

@@ -2,11 +2,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  // useSignInWithGoogle,
-  useUploadUserDetails,
-  useUserSignup,
-} from "@/service/userService";
+import { useUploadUserDetails, useUserSignup } from "@/service/userService";
 import GoogleSigninButton from "@/components/common/GoogleSigninButton";
 import { useUserStore } from "@/store/useUserStore";
 
@@ -37,18 +33,14 @@ const SignupPage = () => {
   });
   const userSignup = useUserSignup();
   const uploadUserDetails = useUploadUserDetails();
-  // const signInWithGoogle = useSignInWithGoogle();
 
   const onSubmit = async (data: TSignupSchema) => {
-    console.log(data);
     userSignup.mutate(data, {
       onSuccess: async (data, value) => {
-        console.log(data);
         uploadUserDetails.mutate(
           { postdata: value, user: data.user },
           {
             onSuccess: () => {
-              console.log(user);
               setUser(data.user);
               navigate("/", { replace: true });
               reset();
@@ -58,31 +50,6 @@ const SignupPage = () => {
       },
     });
   };
-
-  // const handleSignInWithGoogle = () => {
-  //   signInWithGoogle.mutate(void 0, {
-  //     onSuccess: (data) => {
-  //       uploadUserDetails.mutate(
-  //         {
-  //           postdata: {
-  //             email: data.user.email!,
-  //             username: data.user.displayName!,
-  //             profession: "",
-  //             password: "",
-  //             confirmPassword: "",
-  //           },
-  //           user: data.user,
-  //         },
-  //         {
-  //           onSuccess: () => {
-  //             navigate("/", { replace: true });
-  //             reset();
-  //           },
-  //         }
-  //       );
-  //     },
-  //   });
-  // };
 
   if (user) {
     return <Navigate to={"/"} replace />;
@@ -207,12 +174,6 @@ const SignupPage = () => {
           or
           <div className="h-[1px] w-full bg-[#CFDFE2]"></div>
         </div>
-        {/* <button
-          className="w-full rounded-[12px] bg-blue-600 p-[16px] text-[16px] font-semibold text-white focus:outline-none"
-          onClick={() => handleSignInWithGoogle()}
-        >
-          Sign Up with Google
-        </button> */}
         <GoogleSigninButton />
         <div>
           <p className="text-center text-[16px] text-[#0C1421]">

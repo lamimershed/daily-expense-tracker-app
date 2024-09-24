@@ -28,7 +28,7 @@ const GoogleSigninButton = () => {
             onSuccess: () => {
               navigate("/", { replace: true });
             },
-          }
+          },
         );
       },
     });

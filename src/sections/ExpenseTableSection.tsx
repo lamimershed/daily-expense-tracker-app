@@ -19,7 +19,6 @@ export type TtransactionData = {
 
 const ExpenseTableSection = () => {
   const { user } = useUserStore();
-  console.log(new Date(), "date");
 
   const getallDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`)

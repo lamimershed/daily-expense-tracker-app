@@ -8,10 +8,9 @@ import { useEffect } from "react";
 function App() {
   const navigate = useNavigate();
   const { user } = useUserStore();
-  console.log(user?.uid);
   useEffect(() => {
     if (!user) navigate("/login");
-  }, [user]);
+  }, [user, navigate]);
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>

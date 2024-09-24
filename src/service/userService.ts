@@ -60,7 +60,7 @@ export const useUploadUserDetails = () => {
   });
 };
 
-export const userSigninWithEmailPassword = () => {
+export const useSigninWithEmailPassword = () => {
   return useMutation({
     mutationFn: async (postdata: TloginSchema) => {
       const { email, password } = postdata;
@@ -108,7 +108,9 @@ export const useAddNewTransaction = () => {
   return useMutation({
     mutationKey: ["add-new-transaction"],
     mutationFn: async (
-      transaction: TaddNewTransactionFormSchema & { type: "Income" | "Expense" }
+      transaction: TaddNewTransactionFormSchema & {
+        type: "Income" | "Expense";
+      }
     ) => {
       const data = await addDoc(transcationRef, transaction);
       return data;
@@ -140,7 +142,7 @@ export const useGetTransactionData = (
         return undefined;
       }
       const data = await getDocs(q);
-      let dataArr: TtransactionData = [];
+      const dataArr: TtransactionData = [];
       try {
         if (!data?.empty) {
           data?.forEach((doc) =>
@@ -167,7 +169,7 @@ export const useGetTotalIncome = () => {
   const coll = collection(db, `users/${user?.uid}/transactions`);
   const q = query(coll, where("type", "==", "Income"));
   return useQuery({
-    queryKey: ["get-total-income-data"],
+    queryKey: ["get-total-income-data", q],
     queryFn: async () =>
       await getAggregateFromServer(q, {
         total: sum("amount"),
@@ -180,7 +182,7 @@ export const useGetTotalExpense = () => {
   const coll = collection(db, `users/${user?.uid}/transactions`);
   const q = query(coll, where("type", "==", "Expense"));
   return useQuery({
-    queryKey: ["get-total-expanse-data"],
+    queryKey: ["get-total-expanse-data", q],
     queryFn: async () =>
       await getAggregateFromServer(q, {
         totalIncome: sum("amount"),

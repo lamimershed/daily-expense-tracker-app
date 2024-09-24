@@ -23,7 +23,7 @@ export const useUserStore = create<tokenState>()(
       }),
       {
         name: "user-storage",
-      }
-    )
-  )
+      },
+    ),
+  ),
 );

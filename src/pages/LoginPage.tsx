@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userSigninWithEmailPassword } from "@/service/userService";
+import { useSigninWithEmailPassword } from "@/service/userService";
 import GoogleSigninButton from "@/components/common/GoogleSigninButton";
 import { useUserStore } from "@/store/useUserStore";
 
@@ -29,11 +29,10 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const login = userSigninWithEmailPassword();
+  const login = useSigninWithEmailPassword();
   const onSubmit = async (data: TloginSchema) => {
     login.mutate(data, {
       onSuccess: (data) => {
-        console.log(data);
         setUser(data?.user);
         reset();
         navigate("/", { replace: true });
