@@ -42,7 +42,7 @@ export default function DropDownComponent({
       <SelectTrigger
         className={cn(
           "h-[50px] w-full rounded-[12px] border-[#E4E4E4] bg-[#ffffff] px-[20px]",
-          className,
+          className
         )}
       >
         <SelectValue
@@ -58,7 +58,7 @@ export default function DropDownComponent({
           <SelectGroup>
             <SelectLabel>{label}</SelectLabel>
             {options?.map((option) => (
-              <SelectItem key={option.name} value={"" + option?.id}>
+              <SelectItem key={option.name} value={"" + option?.name}>
                 {option?.name}
               </SelectItem>
             ))}
@@ -66,7 +66,7 @@ export default function DropDownComponent({
         )}
         {!label &&
           options?.map((option) => (
-            <SelectItem key={option?.name} value={"" + option?.id}>
+            <SelectItem key={option?.name} value={"" + option?.name}>
               {option?.name}
             </SelectItem>
           ))}

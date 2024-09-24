@@ -2,25 +2,28 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 interface tokenState {
-  token: string | undefined;
-  setToken: (token: string) => void;
-  centerCode: string | undefined;
-  setCenterCode: (centerCode: string | undefined) => void;
+  user:
+    | {
+        displayName?: string;
+        email: string;
+        uid: string;
+        username?: string;
+      }
+    | undefined;
+  setUser: (user: any) => void;
 }
 
 export const useUserStore = create<tokenState>()(
   devtools(
     persist(
       (set) => ({
-        token: undefined,
-        setToken: (value: string) => set(() => ({ token: value })),
-        centerCode: undefined,
-        setCenterCode: (value: string | undefined) =>
-          set(() => ({ centerCode: value })),
+        user: undefined,
+        // setUser: (user: any) => set(user),
+        setUser: (user: any) => set(() => ({ user })),
       }),
       {
         name: "user-storage",
-      },
-    ),
-  ),
+      }
+    )
+  )
 );

@@ -1,23 +1,25 @@
 // images
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { userSigninWithEmailPassword } from "@/service/userService";
+import GoogleSigninButton from "@/components/common/GoogleSigninButton";
+import { useUserStore } from "@/store/useUserStore";
 
 const loginSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Username must be more than 3 characters")
-    .max(30, "Username must be less than 30 characters"),
+  email: z.string().email("Please enter a valid email"),
   password: z
     .string()
     .min(8, "Password must be more than 8 characters")
     .max(30, "Password must be less than 30 characters"),
 });
 
-type TloginSchema = z.infer<typeof loginSchema>;
+export type TloginSchema = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { setUser, user } = useUserStore();
   const {
     register,
     handleSubmit,
@@ -27,14 +29,25 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
+  const login = userSigninWithEmailPassword();
   const onSubmit = async (data: TloginSchema) => {
-    await new Promise((resolve) =>
-      setTimeout(() => {
-        resolve(data);
-      }, 2000),
-    );
-    reset();
+    login.mutate(data, {
+      onSuccess: (data) => {
+        console.log(data);
+        setUser(data?.user);
+        reset();
+        navigate("/", { replace: true });
+      },
+    });
   };
+
+  if (user) {
+    return <Navigate to={"/"} replace />;
+  }
+
+  if (login.isPending) {
+    return <div>loading</div>;
+  }
 
   return (
     <div className="flex justify-center">
@@ -56,11 +69,11 @@ const LoginPage = () => {
               id="username"
               className="h-[60px] w-full rounded-[12px] border border-[#E4E4E4] px-[20px] placeholder:text-[#8897AD] focus:outline-none"
               placeholder="email or username"
-              {...register("username")}
+              {...register("email")}
             />
 
             <p className="h-[20px] text-[12px] text-[#FF0000]">
-              {errors.username ? errors?.username?.message : ""}
+              {errors.email ? errors?.email?.message : ""}
             </p>
           </div>
           <div className="">
@@ -102,6 +115,7 @@ const LoginPage = () => {
           or
           <div className="h-[1px] w-full bg-[#CFDFE2]"></div>
         </div>
+        <GoogleSigninButton />
         {/* sign up */}
         <div className="flex w-[400px] justify-center">
           <p className="text-[16px] text-[#0C1421]">

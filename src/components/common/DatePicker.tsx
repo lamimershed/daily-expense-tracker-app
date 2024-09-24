@@ -30,7 +30,7 @@ const DatePicker = ({ date, setDate }: Prop) => {
           variant={"outline"}
           className={cn(
             "3xl:h-[60px] h-[56px] w-full justify-between rounded-[10px] border border-[#B8B8B8] text-left text-[16px] font-normal xl:h-[42px]",
-            !date && "text-muted-foreground",
+            !date && "text-muted-foreground"
           )}
         >
           {date ? (
@@ -50,30 +50,6 @@ const DatePicker = ({ date, setDate }: Prop) => {
             setDate(date);
           }}
           initialFocus
-          fromDate={add(new Date(), { days: 1 })}
-          toDate={add(new Date(), { weeks: 1 })}
-        />
-        {/* time should be between 9am to 8pm */}
-        <input
-          type="time"
-          className="p mx-auto flex h-[40px] w-full items-center justify-center border-t border-[#B8B8B8] px-[20px] text-[16px] font-normal outline-none"
-          value={date ? format(date, "HH:mm") : "17:00"}
-          min="09:00"
-          max="20:00"
-          onChange={(e) => {
-            if (date) {
-              const [hours, minutes] = e.target.value.split(":");
-              setDate(
-                new Date(
-                  date.getFullYear(),
-                  date.getMonth(),
-                  date.getDate(),
-                  parseInt(hours),
-                  parseInt(minutes),
-                ),
-              );
-            }
-          }}
         />
       </PopoverContent>
     </Popover>
