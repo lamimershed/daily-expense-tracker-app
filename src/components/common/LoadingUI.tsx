@@ -1,8 +1,10 @@
+import { cn } from "@/utils/cn";
+
 const LoadingUI = ({
   error,
   message,
 }: {
-  error?: boolean;
+  error?: "ERROR" | "NODATA" | boolean;
   message?: string;
 }) => {
   if (error) {
@@ -14,8 +16,14 @@ const LoadingUI = ({
             className="bg-blue-600 text-white  px-[20px] items-center rounded-md flex gap-[10px] justify-center"
             disabled
           >
-            <div className="w-[10px] h-[10px] animate-spin bg-white"></div>
-            something went wrong .....
+            <div
+              className={cn(
+                "w-[10px] h-[10px] animate-spin bg-white",
+                error && "animate-none bg-red-500",
+              )}
+            ></div>
+            {error === true && "something went wrong ....."}
+            {error === "NODATA" && "No data found"}
           </button>
           <p className="text-sm text-center">{message}</p>
         </div>

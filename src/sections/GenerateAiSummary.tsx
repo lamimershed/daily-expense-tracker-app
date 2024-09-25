@@ -45,7 +45,7 @@ const GenerateAiSummary = () => {
       collection(db, `users/${user?.uid}/transactions`),
       where("date", ">=", startOfDay),
       where("date", "<=", endOfDay),
-      orderBy("date"),
+      orderBy("date", "desc"),
     );
 
     setFetchQuery(transactionQuery);

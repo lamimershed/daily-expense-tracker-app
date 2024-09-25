@@ -188,7 +188,7 @@ export const useGetTotalExpense = () => {
   const coll = collection(db, `users/${user?.uid}/transactions`);
   const q = query(coll, where("type", "==", "Expense"));
   return useQuery({
-    queryKey: ["get-total-expanse-data", q],
+    queryKey: ["get-total-expense-data", q],
     queryFn: async () =>
       await getAggregateFromServer(q, {
         totalIncome: sum("amount"),

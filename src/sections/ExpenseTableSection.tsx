@@ -22,6 +22,7 @@ const ExpenseTableSection = () => {
 
   const getallDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
+    orderBy("date", "desc"),
   );
 
   const startOfDay = new Date();
@@ -34,7 +35,7 @@ const ExpenseTableSection = () => {
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfDay),
     where("date", "<=", endOfDay),
-    orderBy("date"),
+    orderBy("date", "desc"),
   );
   const startOfWeek = new Date();
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
@@ -45,7 +46,7 @@ const ExpenseTableSection = () => {
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfWeek),
     where("date", "<=", endOfWeek),
-    orderBy("date"),
+    orderBy("date", "desc"),
   );
   const startOfMonth = new Date();
   startOfMonth.setDate(1);
@@ -58,17 +59,17 @@ const ExpenseTableSection = () => {
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfMonth),
     where("date", "<=", endOfMonth),
-    orderBy("date"),
+    orderBy("date", "desc"),
   );
   const getIncomeDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("type", "==", "Income"),
-    orderBy("date"),
+    orderBy("date", "desc"),
   );
   const getExpenseDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("type", "==", "Expense"),
-    orderBy("date"),
+    orderBy("date", "desc"),
   );
   const [fetchQuery, setFetchQuery] = useState(getallDataQuery);
 
@@ -79,10 +80,11 @@ const ExpenseTableSection = () => {
     error,
   } = useGetTransactionData(fetchQuery, user?.uid);
 
-  // const { data: chat } = useGetAiResponse(JSON.stringify(tdata));
-
   if (isLoading) return <LoadingUI />;
   if (isError) {
+    if (error?.message === "No data found") {
+      return <LoadingUI error="NODATA" message="please add new transactions" />;
+    }
     return <LoadingUI error message={error?.message} />;
   }
   return (
@@ -90,7 +92,7 @@ const ExpenseTableSection = () => {
       <h1 className="text-[30px] mb-[20px] font-semibold text-gray-800 text-center">
         Transactions
       </h1>
-      <h2 className="text-[20px] font-semibold text-gray-800 text-center">
+      <h2 className="text-[20px] mb-[12px] font-semibold text-gray-800 text-center">
         Transaction Filters
       </h2>
       <div className=" flex justify-center max-xl:flex-wrap items-center gap-[20px] py-[20px]">
@@ -103,7 +105,7 @@ const ExpenseTableSection = () => {
           onClick={() => setFetchQuery(getCurrentDayDataQuery)}
         />
         <FilterButton
-          title="This Week"
+          title="last 7 days"
           onClick={() => setFetchQuery(getCurrentWeekDataQuery)}
         />
         <FilterButton
@@ -119,7 +121,7 @@ const ExpenseTableSection = () => {
           onClick={() => setFetchQuery(getExpenseDataQuery)}
         />
       </div>
-      <h2 className="text-[20px] font-semibold text-gray-800 text-center">
+      <h2 className="text-[20px] mb-[12px] font-semibold text-gray-800 text-center">
         Transaction Table
       </h2>
       <DataTable

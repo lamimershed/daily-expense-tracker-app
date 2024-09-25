@@ -72,6 +72,12 @@ const AddNewTransactionForm = ({
           queryClient?.invalidateQueries({
             queryKey: ["get-transcation-data"],
           });
+          queryClient?.invalidateQueries({
+            queryKey: ["get-total-income-data"],
+          });
+          queryClient?.invalidateQueries({
+            queryKey: ["get-total-expense-data"],
+          });
           toast({
             title: "Transaction",
             description: "Transaction added successfully",

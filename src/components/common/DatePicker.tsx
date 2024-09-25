@@ -34,7 +34,7 @@ const DatePicker = ({ date, setDate }: Prop) => {
           )}
         >
           {date ? (
-            format(date, "yyyy-MM-dd hh:mm a") // should show 12 hour format
+            format(date, "yyyy-MM-dd") // should show 12 hour format
           ) : (
             <span className="text-[#3F3F3F]">Pick Date</span>
           )}
