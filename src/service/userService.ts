@@ -82,8 +82,7 @@ export const useSignInWithGoogle = () => {
 export const useGetUserDetails = () => {
   const { user } = useUserStore();
   return useQuery({
-    //  85:5  error  The following dependencies are missing in your queryKey: user.uid  @tanstack/qu
-
+    // eslint-disable-next-line
     queryKey: ["get-user-details", user?.uid],
     queryFn: async () => {
       if (!user?.uid) {
@@ -135,13 +134,16 @@ export const useAddNewTransaction = () => {
 //   });
 // };
 export const useGetTransactionData = (
-  q: Query<DocumentData, DocumentData>,
+  q: Query<DocumentData, DocumentData> | undefined,
   userid: string | undefined,
 ) => {
   return useQuery({
     queryKey: ["get-transcation-data", q, userid],
     queryFn: async () => {
       if (!userid) {
+        return undefined;
+      }
+      if (!q) {
         return undefined;
       }
       const data = await getDocs(q);
@@ -164,7 +166,7 @@ export const useGetTransactionData = (
         throw new Error("No data found");
       }
     },
-    enabled: !!userid,
+    enabled: !!userid && !!q,
   });
 };
 export const useGetTotalIncome = () => {
@@ -196,12 +198,13 @@ export const useGetTotalExpense = () => {
 
 export const useGetAiResponse = (jsonData: string) => {
   return useQuery({
-    queryKey: ["get-ai-response", jsonData],
+    queryKey: ["get-ai-response", { jsonData }],
     queryFn: async () => {
       const data = await getOpenAIResponse(
         `Here is my transaction data in json. Please generate a report 
         analyzing my income and expenses, pinpoint areas where 
-        expense management could be improved, and offer actionable recommendations as summery${jsonData}`,
+        expense management could be improved, and offer actionable recommendations as summery${jsonData}
+        also limit the response to max_tokens: 500 make it lessthan 300 words and short`,
       );
       return data;
     },

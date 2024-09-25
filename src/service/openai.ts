@@ -14,7 +14,7 @@ export const getOpenAIResponse = async (prompt: string) => {
   const response = await openai.post("/completions", {
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
-    max_tokens: 150,
+    max_tokens: 500,
   });
   return response.data;
 };

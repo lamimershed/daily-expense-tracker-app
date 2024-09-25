@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import AddNewTransactionForm from "@/components/forms/AddNewTransactionForm";
 import { useGetTotalExpense, useGetTotalIncome } from "@/service/userService";
 import LoadingUI from "@/components/common/LoadingUI";
+import GenerateAiSummary from "@/sections/GenerateAiSummary";
 
 const DashBoardPage = () => {
   const totalIncome = useGetTotalIncome();
@@ -36,6 +37,7 @@ const DashBoardPage = () => {
           />
         </div>
       )}
+      <GenerateAiSummary />
       <ExpenseTableSection />
     </div>
   );

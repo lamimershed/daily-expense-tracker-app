@@ -2,9 +2,9 @@ import { DataTable } from "@/components/common/DataTable";
 import LoadingUI from "@/components/common/LoadingUI";
 import { Button } from "@/components/ui/button";
 import { db } from "@/firebase";
-import { useGetAiResponse, useGetTransactionData } from "@/service/userService";
+import { useGetTransactionData } from "@/service/userService";
 import { useUserStore } from "@/store/useUserStore";
-import { collection, query, where } from "firebase/firestore";
+import { collection, orderBy, query, where } from "firebase/firestore";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
@@ -21,7 +21,7 @@ const ExpenseTableSection = () => {
   const { user } = useUserStore();
 
   const getallDataQuery = query(
-    collection(db, `users/${user?.uid}/transactions`)
+    collection(db, `users/${user?.uid}/transactions`),
   );
 
   const startOfDay = new Date();
@@ -33,8 +33,8 @@ const ExpenseTableSection = () => {
   const getCurrentDayDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfDay),
-    where("date", "<=", endOfDay)
-    // orderBy("startDate")
+    where("date", "<=", endOfDay),
+    orderBy("date"),
   );
   const startOfWeek = new Date();
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
@@ -44,7 +44,8 @@ const ExpenseTableSection = () => {
   const getCurrentWeekDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfWeek),
-    where("date", "<=", endOfWeek)
+    where("date", "<=", endOfWeek),
+    orderBy("date"),
   );
   const startOfMonth = new Date();
   startOfMonth.setDate(1);
@@ -56,15 +57,18 @@ const ExpenseTableSection = () => {
   const getCurrentMonthDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfMonth),
-    where("date", "<=", endOfMonth)
+    where("date", "<=", endOfMonth),
+    orderBy("date"),
   );
   const getIncomeDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
-    where("type", "==", "Income")
+    where("type", "==", "Income"),
+    orderBy("date"),
   );
   const getExpenseDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
-    where("type", "==", "Expense")
+    where("type", "==", "Expense"),
+    orderBy("date"),
   );
   const [fetchQuery, setFetchQuery] = useState(getallDataQuery);
 
@@ -75,9 +79,7 @@ const ExpenseTableSection = () => {
     error,
   } = useGetTransactionData(fetchQuery, user?.uid);
 
-  const { data: chat } = useGetAiResponse(JSON.stringify(tdata));
-
-  console.log(chat, "open ai ");
+  // const { data: chat } = useGetAiResponse(JSON.stringify(tdata));
 
   if (isLoading) return <LoadingUI />;
   if (isError) {
