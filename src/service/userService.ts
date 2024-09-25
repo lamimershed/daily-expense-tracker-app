@@ -28,6 +28,7 @@ import { TtransactionData } from "@/sections/ExpenseTableSection";
 import { format } from "date-fns";
 import { getOpenAIResponse } from "./openai";
 
+// signup user
 export const useUserSignup = () => {
   return useMutation({
     mutationFn: async (postdata: TSignupSchema) => {
@@ -37,6 +38,7 @@ export const useUserSignup = () => {
     },
   });
 };
+// upload user details
 export const useUploadUserDetails = () => {
   return useMutation({
     mutationKey: ["user-details"],
@@ -61,6 +63,7 @@ export const useUploadUserDetails = () => {
   });
 };
 
+// signin with email and password
 export const useSigninWithEmailPassword = () => {
   return useMutation({
     mutationFn: async (postdata: TloginSchema) => {
@@ -70,6 +73,7 @@ export const useSigninWithEmailPassword = () => {
     },
   });
 };
+// signin with google
 export const useSignInWithGoogle = () => {
   return useMutation({
     mutationFn: async () => {
@@ -119,20 +123,7 @@ export const useAddNewTransaction = () => {
     },
   });
 };
-
-// export const useGetTransactionData = () => {
-//   // const { user } = useUserStore();
-//   // const q = query(
-//   //   collection(db, `users/${user?.uid}/transactions`),
-//   //   where("type", "==", "Expense")
-//   // );
-//   return useMutation({
-//     mutationKey: ["get-transcation-data"],
-//     mutationFn: async (q: Query<DocumentData, DocumentData>) => {
-//       return await getDocs(q);
-//     },
-//   });
-// };
+// get transcation data
 export const useGetTransactionData = (
   q: Query<DocumentData, DocumentData> | undefined,
   userid: string | undefined,
@@ -204,7 +195,7 @@ export const useGetAiResponse = (jsonData: string) => {
         `Here is my transaction data in json. Please generate a report 
         analyzing my income and expenses, pinpoint areas where 
         expense management could be improved, and offer actionable recommendations as summery${jsonData}
-        also limit the response to max_tokens: 500 make it lessthan 300 words and short`,
+        also limit the response to max_tokens: 500 make it lessthan 300 words and short also give in markdown format`,
       );
       return data;
     },
