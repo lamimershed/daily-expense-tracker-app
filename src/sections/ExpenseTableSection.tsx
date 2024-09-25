@@ -21,7 +21,7 @@ const ExpenseTableSection = () => {
   const { user } = useUserStore();
 
   const getallDataQuery = query(
-    collection(db, `users/${user?.uid}/transactions`),
+    collection(db, `users/${user?.uid}/transactions`)
   );
 
   const startOfDay = new Date();
@@ -33,7 +33,7 @@ const ExpenseTableSection = () => {
   const getCurrentDayDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfDay),
-    where("date", "<=", endOfDay),
+    where("date", "<=", endOfDay)
     // orderBy("startDate")
   );
   const startOfWeek = new Date();
@@ -44,7 +44,7 @@ const ExpenseTableSection = () => {
   const getCurrentWeekDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfWeek),
-    where("date", "<=", endOfWeek),
+    where("date", "<=", endOfWeek)
   );
   const startOfMonth = new Date();
   startOfMonth.setDate(1);
@@ -56,15 +56,15 @@ const ExpenseTableSection = () => {
   const getCurrentMonthDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfMonth),
-    where("date", "<=", endOfMonth),
+    where("date", "<=", endOfMonth)
   );
   const getIncomeDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
-    where("type", "==", "Income"),
+    where("type", "==", "Income")
   );
   const getExpenseDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
-    where("type", "==", "Expense"),
+    where("type", "==", "Expense")
   );
   const [fetchQuery, setFetchQuery] = useState(getallDataQuery);
 
@@ -160,7 +160,7 @@ const ExpenseTableSection = () => {
             header: "Tag",
           },
         ]}
-        data={tdata!}
+        data={tdata ?? []}
       />
     </div>
   );
