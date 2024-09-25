@@ -6,7 +6,7 @@ import DropDownComponent from "../common/DropDownComponent";
 import DatePicker from "../common/DatePicker";
 import { useAddNewTransaction } from "@/service/userService";
 import { useQueryClient } from "@tanstack/react-query";
-
+import { useToast } from "@/hooks/use-toast";
 const AddNewTransactionFormSchema = z.object({
   date: z.date(),
   name: z
@@ -31,6 +31,7 @@ const AddNewTransactionForm = ({
 }: {
   formType: "INCOME" | "EXPENSE";
 }) => {
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -71,12 +72,16 @@ const AddNewTransactionForm = ({
           queryClient?.invalidateQueries({
             queryKey: ["get-transcation-data"],
           });
+          toast({
+            title: "Transaction",
+            description: "Transaction added successfully",
+          });
         },
       },
     );
   };
   return (
-    <div className="flex flex-col w-full max-w-[400px] bg-white rounded-lg">
+    <div className="flex flex-col w-full xl:max-w-[400px] bg-white rounded-lg">
       <DialogHeader>
         <DialogTitle className="text-center text-xl border-b border-gray-300 pb-3">
           {formType === "INCOME" ? "Add Income" : "Add Expense"}

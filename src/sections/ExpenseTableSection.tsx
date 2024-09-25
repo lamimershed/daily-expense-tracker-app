@@ -87,7 +87,13 @@ const ExpenseTableSection = () => {
   }
   return (
     <div className="flex flex-col">
-      <div className=" flex justify-center items-center gap-[20px] py-[20px]">
+      <h1 className="text-[30px] mb-[20px] font-semibold text-gray-800 text-center">
+        Transactions
+      </h1>
+      <h2 className="text-[20px] font-semibold text-gray-800 text-center">
+        Transaction Filters
+      </h2>
+      <div className=" flex justify-center max-xl:flex-wrap items-center gap-[20px] py-[20px]">
         <FilterButton
           title="All"
           onClick={() => setFetchQuery(getallDataQuery)}
@@ -113,7 +119,9 @@ const ExpenseTableSection = () => {
           onClick={() => setFetchQuery(getExpenseDataQuery)}
         />
       </div>
-
+      <h2 className="text-[20px] font-semibold text-gray-800 text-center">
+        Transaction Table
+      </h2>
       <DataTable
         columns={[
           {

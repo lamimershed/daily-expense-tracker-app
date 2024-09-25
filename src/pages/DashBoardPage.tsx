@@ -4,8 +4,17 @@ import AddNewTransactionForm from "@/components/forms/AddNewTransactionForm";
 import { useGetTotalExpense, useGetTotalIncome } from "@/service/userService";
 import LoadingUI from "@/components/common/LoadingUI";
 import GenerateAiSummary from "@/sections/GenerateAiSummary";
+import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/useUserStore";
+import { useEffect } from "react";
 
 const DashBoardPage = () => {
+  const navigate = useNavigate();
+  const { user } = useUserStore();
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
+
   const totalIncome = useGetTotalIncome();
   const totalExpense = useGetTotalExpense();
 

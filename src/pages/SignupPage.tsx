@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useUploadUserDetails, useUserSignup } from "@/service/userService";
 import GoogleSigninButton from "@/components/common/GoogleSigninButton";
 import { useUserStore } from "@/store/useUserStore";
+import LoadingUI from "@/components/common/LoadingUI";
+import { useToast } from "@/hooks/use-toast";
 
 const signupSchema = z
   .object({
@@ -16,11 +18,13 @@ const signupSchema = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "passwords do not match",
+    path: ["confirmPassword"],
   });
 
 export type TSignupSchema = z.infer<typeof signupSchema>;
 
 const SignupPage = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const { setUser, user } = useUserStore();
   const {
@@ -44,9 +48,25 @@ const SignupPage = () => {
               setUser(data.user);
               navigate("/", { replace: true });
               reset();
+              toast({
+                title: "Success",
+                description: "User created successfully",
+              });
+            },
+            onError: (error) => {
+              toast({
+                title: "Error",
+                description: error?.message,
+              });
             },
           },
         );
+      },
+      onError: (error) => {
+        toast({
+          title: "Error",
+          description: error?.message,
+        });
       },
     });
   };
@@ -56,12 +76,12 @@ const SignupPage = () => {
   }
 
   if (userSignup.isPending || uploadUserDetails.isPending) {
-    return <div>loading</div>;
+    return <LoadingUI />;
   }
 
   return (
-    <div className="mx-auto flex h-[90vh] flex-col items-center justify-center">
-      <div className="relative mt-[0px] flex w-[400px] flex-col gap-[20px]">
+    <div className="mx-auto flex h-full flex-col items-center justify-center py-[40px]">
+      <div className="relative mt-[0px] flex w-[400px] max-xl:w-full flex-col gap-[0px]">
         <h1 className="text-center text-[36px] font-semibold text-[#0C1421]">
           Sign up
         </h1>
@@ -169,7 +189,7 @@ const SignupPage = () => {
           </button>
         </form>
         {/* divider */}
-        <div className="my-[30px] flex w-[400px] items-center gap-[20px] text-[#294957]">
+        <div className="my-[30px] flex w-[400px] max-xl:w-full items-center gap-[20px] text-[#294957]">
           <div className="h-[1px] w-full bg-[#CFDFE2]"></div>
           or
           <div className="h-[1px] w-full bg-[#CFDFE2]"></div>

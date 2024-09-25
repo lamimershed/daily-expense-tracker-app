@@ -107,6 +107,14 @@ export const useGetUserDetails = () => {
   });
 };
 
+export const useLogout = () => {
+  return useMutation({
+    mutationFn: async () => {
+      return await auth.signOut();
+    },
+  });
+};
+
 // add transcation
 export const useAddNewTransaction = () => {
   const { user } = useUserStore();
@@ -160,6 +168,7 @@ export const useGetTransactionData = (
     enabled: !!userid && !!q,
   });
 };
+// get total income
 export const useGetTotalIncome = () => {
   const { user } = useUserStore();
   const coll = collection(db, `users/${user?.uid}/transactions`);
@@ -173,6 +182,7 @@ export const useGetTotalIncome = () => {
     enabled: !!user?.uid,
   });
 };
+// get total expense
 export const useGetTotalExpense = () => {
   const { user } = useUserStore();
   const coll = collection(db, `users/${user?.uid}/transactions`);
@@ -186,7 +196,7 @@ export const useGetTotalExpense = () => {
     enabled: !!user?.uid,
   });
 };
-
+// get ai response
 export const useGetAiResponse = (jsonData: string) => {
   return useQuery({
     queryKey: ["get-ai-response", { jsonData }],
@@ -195,7 +205,7 @@ export const useGetAiResponse = (jsonData: string) => {
         `Here is my transaction data in json. Please generate a report 
         analyzing my income and expenses, pinpoint areas where 
         expense management could be improved, and offer actionable recommendations as summery${jsonData}
-        also limit the response to max_tokens: 500 make it lessthan 300 words and short also give in markdown format`,
+        also limit the response to max_tokens: 500 make it lessthan 300 words and short`,
       );
       return data;
     },

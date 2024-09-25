@@ -7,7 +7,7 @@ const LoadingUI = ({
 }) => {
   if (error) {
     return (
-      <div className="w-full flex justify-center items-center h-[100px]">
+      <div className="w-full flex justify-center items-center h-[100px] overflow-scroll">
         <div className="flex flex-col">
           <button
             type="button"

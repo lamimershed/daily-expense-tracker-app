@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSigninWithEmailPassword } from "@/service/userService";
 import GoogleSigninButton from "@/components/common/GoogleSigninButton";
 import { useUserStore } from "@/store/useUserStore";
+import LoadingUI from "@/components/common/LoadingUI";
+import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -18,6 +20,7 @@ const loginSchema = z.object({
 export type TloginSchema = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const { setUser, user } = useUserStore();
   const {
@@ -36,6 +39,16 @@ const LoginPage = () => {
         setUser(data?.user);
         reset();
         navigate("/", { replace: true });
+        toast({
+          title: "Success",
+          description: "User logged in successfully",
+        });
+      },
+      onError: (error) => {
+        toast({
+          title: "Error",
+          description: error?.message,
+        });
       },
     });
   };
@@ -45,17 +58,20 @@ const LoginPage = () => {
   }
 
   if (login.isPending) {
-    return <div>loading</div>;
+    return <LoadingUI />;
   }
 
   return (
     <div className="flex justify-center">
-      <div className="flex h-[90vh] flex-col items-start justify-center">
-        <h1 className="w-[400px] text-center text-[36px] font-semibold text-[#0C1421]">
+      <div className="flex h-[90vh] max-xl:w-full px-[20px] flex-col items-start justify-center">
+        <h1 className="xl:w-[400px] w-full text-center text-[36px] font-semibold text-[#0C1421]">
           Welcome{" "}
         </h1>
         {/* form  */}
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-[40px] w-[400px]">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-[40px] xl:w-[400px] w-full "
+        >
           <div className="">
             <label
               htmlFor="username"
@@ -109,14 +125,14 @@ const LoginPage = () => {
           </button>
         </form>
         {/* divider */}
-        <div className="my-[30px] flex w-[400px] items-center gap-[20px] text-[#294957]">
+        <div className="my-[30px] flex  xl:w-[400px] w-full items-center gap-[20px] text-[#294957]">
           <div className="h-[1px] w-full bg-[#CFDFE2]"></div>
           or
           <div className="h-[1px] w-full bg-[#CFDFE2]"></div>
         </div>
         <GoogleSigninButton />
         {/* sign up */}
-        <div className="flex w-[400px] justify-center">
+        <div className="flex xl:w-[400px] justify-center w-full">
           <p className="text-[16px] text-[#0C1421]">
             {`Don't have an account? `}
             <Link

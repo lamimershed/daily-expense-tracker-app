@@ -29,7 +29,8 @@ const GenerateAiSummary = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<TaddNewTransactionFormSchema>({
     resolver: zodResolver(addNewTransactionFormSchema),
   });
@@ -44,7 +45,7 @@ const GenerateAiSummary = () => {
       collection(db, `users/${user?.uid}/transactions`),
       where("date", ">=", startOfDay),
       where("date", "<=", endOfDay),
-      orderBy("startDate"),
+      orderBy("date"),
     );
 
     setFetchQuery(transactionQuery);
@@ -80,10 +81,10 @@ const GenerateAiSummary = () => {
     <div className="w-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full flex items-center justify-between"
+        className="w-full flex max-xl:flex-col items-center justify-between"
       >
         {/* Date range inputs */}
-        <div className="w-[31%]">
+        <div className="w-[31%] max-xl:w-full">
           <label htmlFor="fromDate" className="mb-2 block text-gray-800">
             From Date
           </label>
@@ -101,7 +102,7 @@ const GenerateAiSummary = () => {
             {errors?.fromDate?.message || ""}
           </p>
         </div>
-        <div className="w-[31%]">
+        <div className="w-[31%] max-xl:w-full">
           <label htmlFor="toDate" className="mb-2 block text-gray-800">
             To Date
           </label>
@@ -123,7 +124,7 @@ const GenerateAiSummary = () => {
         {/* Submit button */}
         <button
           type="submit"
-          className="bg-blue-600 w-[31%] h-[60px] text-white p-2 rounded-md"
+          className="bg-blue-600 max-xl:w-full w-[31%] h-[60px] text-white p-2 rounded-md"
         >
           Get AI Feedback
         </button>
@@ -145,9 +146,11 @@ const GenerateAiSummary = () => {
               <Markdown>{aiFeedback?.choices[0]?.message?.content}</Markdown>
             </div>
             <button
+              disabled={isSubmitting}
               className="bg-blue-600 w-full text-white p-2 rounded-md mt-[20px]"
               onClick={() => {
                 setFetchQuery(undefined);
+                reset();
               }}
             >
               clear
