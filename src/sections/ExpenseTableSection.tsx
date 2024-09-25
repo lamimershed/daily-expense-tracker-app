@@ -2,7 +2,7 @@ import { DataTable } from "@/components/common/DataTable";
 import LoadingUI from "@/components/common/LoadingUI";
 import { Button } from "@/components/ui/button";
 import { db } from "@/firebase";
-import { useGetTransactionData } from "@/service/userService";
+import { useGetAiResponse, useGetTransactionData } from "@/service/userService";
 import { useUserStore } from "@/store/useUserStore";
 import { collection, query, where } from "firebase/firestore";
 import { ArrowUpDown } from "lucide-react";
@@ -21,7 +21,7 @@ const ExpenseTableSection = () => {
   const { user } = useUserStore();
 
   const getallDataQuery = query(
-    collection(db, `users/${user?.uid}/transactions`)
+    collection(db, `users/${user?.uid}/transactions`),
   );
 
   const startOfDay = new Date();
@@ -33,7 +33,7 @@ const ExpenseTableSection = () => {
   const getCurrentDayDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfDay),
-    where("date", "<=", endOfDay)
+    where("date", "<=", endOfDay),
     // orderBy("startDate")
   );
   const startOfWeek = new Date();
@@ -44,7 +44,7 @@ const ExpenseTableSection = () => {
   const getCurrentWeekDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfWeek),
-    where("date", "<=", endOfWeek)
+    where("date", "<=", endOfWeek),
   );
   const startOfMonth = new Date();
   startOfMonth.setDate(1);
@@ -56,15 +56,15 @@ const ExpenseTableSection = () => {
   const getCurrentMonthDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
     where("date", ">=", startOfMonth),
-    where("date", "<=", endOfMonth)
+    where("date", "<=", endOfMonth),
   );
   const getIncomeDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
-    where("type", "==", "Income")
+    where("type", "==", "Income"),
   );
   const getExpenseDataQuery = query(
     collection(db, `users/${user?.uid}/transactions`),
-    where("type", "==", "Expense")
+    where("type", "==", "Expense"),
   );
   const [fetchQuery, setFetchQuery] = useState(getallDataQuery);
 
@@ -74,6 +74,10 @@ const ExpenseTableSection = () => {
     isError,
     error,
   } = useGetTransactionData(fetchQuery, user?.uid);
+
+  const { data: chat } = useGetAiResponse(JSON.stringify(tdata));
+
+  console.log(chat, "open ai ");
 
   if (isLoading) return <LoadingUI />;
   if (isError) {
@@ -156,7 +160,6 @@ const ExpenseTableSection = () => {
             header: "Tag",
           },
         ]}
-        // data={data?.docs?.map((doc) => doc.data()) as TTransactionData}
         data={tdata!}
       />
     </div>

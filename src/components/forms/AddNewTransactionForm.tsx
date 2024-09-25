@@ -60,7 +60,6 @@ const AddNewTransactionForm = ({
 
   const addNewTransaction = useAddNewTransaction();
   const onSubmit = (data: TaddNewTransactionFormSchema) => {
-    console.log(data?.amount, "amount");
     addNewTransaction.mutate(
       {
         ...data,
@@ -73,7 +72,7 @@ const AddNewTransactionForm = ({
             queryKey: ["get-transcation-data"],
           });
         },
-      },
+      }
     );
   };
   return (

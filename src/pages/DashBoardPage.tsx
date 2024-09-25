@@ -16,7 +16,7 @@ const DashBoardPage = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
           <Card
             heading="Total Income "
-            amount={totalIncome?.data?.data().total! ?? 0}
+            amount={totalIncome?.data?.data().total ?? 0}
             buttonTitle="Add Income"
             form={<AddNewTransactionForm formType="INCOME" />}
           />
@@ -29,8 +29,8 @@ const DashBoardPage = () => {
           <Card
             heading="Balance"
             amount={
-              totalIncome?.data?.data().total! -
-                totalExpense?.data?.data()?.totalIncome! ?? 0
+              (totalIncome?.data?.data().total ?? 0) -
+              (totalExpense?.data?.data()?.totalIncome ?? 0)
             }
             buttonTitle="Add Transaction"
           />

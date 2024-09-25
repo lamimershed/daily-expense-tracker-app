@@ -26,6 +26,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { TaddNewTransactionFormSchema } from "@/components/forms/AddNewTransactionForm";
 import { TtransactionData } from "@/sections/ExpenseTableSection";
 import { format } from "date-fns";
+import { getOpenAIResponse } from "./openai";
 
 export const useUserSignup = () => {
   return useMutation({
@@ -81,7 +82,9 @@ export const useSignInWithGoogle = () => {
 export const useGetUserDetails = () => {
   const { user } = useUserStore();
   return useQuery({
-    queryKey: ["get-user-details"],
+    //  85:5  error  The following dependencies are missing in your queryKey: user.uid  @tanstack/qu
+
+    queryKey: ["get-user-details", user?.uid],
     queryFn: async () => {
       if (!user?.uid) {
         return undefined;
@@ -136,7 +139,7 @@ export const useGetTransactionData = (
   userid: string | undefined
 ) => {
   return useQuery({
-    queryKey: ["get-transcation-data", q],
+    queryKey: ["get-transcation-data", q, userid],
     queryFn: async () => {
       if (!userid) {
         return undefined;
@@ -188,5 +191,20 @@ export const useGetTotalExpense = () => {
         totalIncome: sum("amount"),
       }),
     enabled: !!user?.uid,
+  });
+};
+
+export const useGetAiResponse = (jsonData: string) => {
+  return useQuery({
+    queryKey: ["get-ai-response", jsonData],
+    queryFn: async () => {
+      const data = await getOpenAIResponse(
+        `Here is my transaction data in json. Please generate a report 
+        analyzing my income and expenses, pinpoint areas where 
+        expense management could be improved, and offer actionable recommendations as summery${jsonData}`
+      );
+      return data;
+    },
+    enabled: !!jsonData,
   });
 };

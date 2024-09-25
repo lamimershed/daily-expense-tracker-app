@@ -45,7 +45,7 @@ const SignupPage = () => {
               navigate("/", { replace: true });
               reset();
             },
-          }
+          },
         );
       },
     });

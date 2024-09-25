@@ -30,7 +30,7 @@ const DatePicker = ({ date, setDate }: Prop) => {
           variant={"outline"}
           className={cn(
             "3xl:h-[60px] h-[56px] w-full justify-between rounded-[10px] border border-[#B8B8B8] text-left text-[16px] font-normal xl:h-[42px]",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
           )}
         >
           {date ? (
