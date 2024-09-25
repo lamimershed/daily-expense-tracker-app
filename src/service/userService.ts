@@ -113,7 +113,7 @@ export const useAddNewTransaction = () => {
     mutationFn: async (
       transaction: TaddNewTransactionFormSchema & {
         type: "Income" | "Expense";
-      }
+      },
     ) => {
       const data = await addDoc(transcationRef, transaction);
       return data;
@@ -136,7 +136,7 @@ export const useAddNewTransaction = () => {
 // };
 export const useGetTransactionData = (
   q: Query<DocumentData, DocumentData>,
-  userid: string | undefined
+  userid: string | undefined,
 ) => {
   return useQuery({
     queryKey: ["get-transcation-data", q, userid],
@@ -153,7 +153,7 @@ export const useGetTransactionData = (
               ...doc?.data(),
               id: doc?.id,
               date: format(doc?.data()?.date.toDate(""), "dd-MM-yyyy"),
-            } as TtransactionData[0])
+            } as TtransactionData[0]),
           );
           return dataArr;
         } else {
@@ -201,7 +201,7 @@ export const useGetAiResponse = (jsonData: string) => {
       const data = await getOpenAIResponse(
         `Here is my transaction data in json. Please generate a report 
         analyzing my income and expenses, pinpoint areas where 
-        expense management could be improved, and offer actionable recommendations as summery${jsonData}`
+        expense management could be improved, and offer actionable recommendations as summery${jsonData}`,
       );
       return data;
     },
