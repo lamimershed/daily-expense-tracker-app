@@ -2,7 +2,6 @@
 
 ## Project Api, Design, Prd documents link
 
-- figma link : https://www.figma.com/design/bjihoGWikVk6i9fnbNunUS/Kare-Sass?node-id=1291-21411&node-type=canvas&t=eV9CAbUjyX9fJoi1-0
 
 ## Project Folder Conventions and Review Points
 
